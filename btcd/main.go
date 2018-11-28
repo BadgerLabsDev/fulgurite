@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -41,6 +42,9 @@ func getCPUUsage() (total, idle uint64) {
 func main() {
 	start:
 		cmd := exec.Command("/go/bin/btcd", "—txindex", "—datadir=pi/media/Untiled/chaindata")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+
 		err := cmd.Start()
 		if err != nil {
 			log.Fatal(err)
@@ -56,5 +60,6 @@ func main() {
 				time.Sleep(5 * time.Second) // Give time to btcd to shut down
 				goto start
 			}
+			println(t.String())
 		}
 }
